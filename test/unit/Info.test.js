@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 const Info = require('../../lib/models/Info');
 
-describe('Athlete Info Model', () => {
+describe('Info Model', () => {
 
   it('validates with required fields', () => {
     const info = new Info({
@@ -50,9 +50,7 @@ describe('Athlete Info Model', () => {
         facebookUrl: 'http://facebook.com',
         twitterUrl: 'http://twitter.com',
         instagramUrl: 'http://instagram.com'
-      },
-      bio: 'Hi my name is christy. I love beagles and ice cream.',
-      awards: '#1 walker of my dog'
+      }
     });
 
     return info.validate();
