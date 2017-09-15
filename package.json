@@ -1,16 +1,40 @@
 {
   "name": "varcity-server",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13"
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.1",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.4",
+    "jsonwebtoken-promisified": "^1.0.3",
+    "mongoose": "^4.11.11",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "eslint": "^4.6.1",
+    "mocha": "^3.5.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+    "test:e2e": "mocha tests/e2e",
+    "test:unit": "mocha tests/unit",
+    "test": "mocha tests --recursive",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varcity-network/varcity-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/varcity-network/varcity-server/issues"
+  },
+  "homepage": "https://github.com/varcity-network/varcity-server#readme"
 }
