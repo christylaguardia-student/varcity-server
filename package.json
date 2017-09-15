@@ -22,9 +22,9 @@
     "mocha": "^3.5.3"
   },
   "scripts": {
-    "test:e2e": "mocha tests/e2e",
-    "test:unit": "mocha tests/unit",
-    "test": "mocha tests --recursive",
+    "test:e2e": "mocha test/e2e",
+    "test:unit": "mocha test/unit",
+    "test": "mocha test --recursive",
     "start": "nodemon server.js"
   },
   "repository": {
