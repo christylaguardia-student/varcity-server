@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 const Info = require('../../lib/models/Info');
 
-describe('Info Model', () => {
+describe.skip('Info Model', () => {
 
   it('validates with required fields', () => {
     const info = new Info({
