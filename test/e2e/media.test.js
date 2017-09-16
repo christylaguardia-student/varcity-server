@@ -22,7 +22,7 @@ describe('media api', () => {
   const testImg = {
     description: 'testImg description',
     mediaType: 'image upload',
-    imgUrl: './icons8-Basketball-64.png'
+    img: '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
   };
 
   const testVideo = {
@@ -31,16 +31,29 @@ describe('media api', () => {
     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
   };
 
-  function saveMedia(media) {
+  function saveVideo(video) {
     const userId = mediaTestUser[0]._id;
     return request
     .post(`/api/athletes/${userId}/media`)
     .set('Authorization', token)
-    .send(media)
+    .send(video)
     .then(res => {
       let body = res.body;
-      media._id = body._id;
-      return media;
+      video._id = body._id;
+      return video;
+    });
+  }
+
+  function saveImage(image) {
+    const userId = mediaTestUser[0]._id;
+    return request
+    .post(`/api/athletes/${userId}/media`)
+    .set('Authorization', token)
+    .attach('image', image.img)
+    .then(res => {
+      let body = res.body;
+      // image._id = body._id;
+      return image;
     });
   }
   
@@ -54,14 +67,13 @@ describe('media api', () => {
       });
   });
 
-  
   it('saves a video', () => {
-    return saveMedia(testVideo)
+    return saveVideo(testVideo)
     .then(saved => assert.deepEqual(saved, testVideo));
   });
   
   it.only('saves an image', () => {
-    return saveMedia(testImg)
+    return saveImage(testImg)
       .then(saved => {
         console.log('saved is', saved);
         assert.deepEqual(saved, testImg);
