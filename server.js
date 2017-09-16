@@ -1,5 +1,5 @@
 /* eslint no-console: "off" */
-require('dotenv').config()
+require('dotenv').config();
 const app = require('./lib/app');
 const http = require('http');
 
