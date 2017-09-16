@@ -11,11 +11,8 @@ describe('media api', () => {
     password: 'pword'
   };
 
-  before(request
-    .post('/api/auth/signup', (req, res, next) => {
-
-    }
-  ))
+  let token = '';
+  before();
 
   const testImg = {
     description: 'testImg description',
@@ -28,8 +25,10 @@ describe('media api', () => {
   };
 
   function saveMedia(media) {
+    const userId = 
+
     return request
-      .post('/api/athletes/:id/media')
+      .post(`/api/athletes/${userId}/media`)
       .send(media)
       .then(res => {
         let body = res.body;
