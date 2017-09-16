@@ -37,9 +37,10 @@ describe('user auth API', () => {
       const failedPerson = await req
         .post('/api/auth/verify')
         .send(testUserThree);
-      assert.equal(testUserThree.body.code, 400);
+        console.log(failedPerson)
+      assert.equal(testUserThree.code, 400);
       assert.equal(
-        testUserThree.body.error,
+        testUserThree.error,
         'Both email and password are required.'
       );
     });
