@@ -13,7 +13,9 @@ describe('media api', () => {
   };
 
   let token = '';
-  before(async () => token = await request.post('/api/auth/signup').send(mediaTestUser));
+  before(async () => {
+    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
+  });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
   const testImg = {
@@ -28,18 +30,17 @@ describe('media api', () => {
 
   function saveMedia(media) {
     const userId = mediaTestUser[0]._id;
-    console.log('userId', userId);
     return request
-      .post(`/api/athletes/${userId}/media`)
-      .set('Authorization', token)
-      .send(media)
-      .then(res => {
-        let body = res.body;
-        media._id = body._id;
-        return media;
-      });
+    .post(`/api/athletes/${userId}/media`)
+    .set('Authorization', token)
+    .send(media)
+    .then(res => {
+      let body = res.body;
+      media._id = body._id;
+      return media;
+    });
   }
-
+  
   it.only('Initial /GET returns empty list', () => {
     const userId = mediaTestUser[0]._id;    
     return request.get(`/api/athletes/${userId}/media`)
