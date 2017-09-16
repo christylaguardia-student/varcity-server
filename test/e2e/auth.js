@@ -1,17 +1,12 @@
 const req = require('./_request');
 const chai = require('chai');
 const assert = chai.assert;
+const {drop} = require('./_db')
 
 describe('user auth API', () => {
-  let token = '';
+  // let token = '';
 
-  before(() => {
-    // return req.post('/users/signup')
-    //     .send(seedPeople[0])
-    //     .then(res => {
-    //         token = res.body.token;
-    //     });
-  });
+  before(async () => drop())
 
 const testUser = {
   email: 'tokenjoe@joe.com',
@@ -20,10 +15,8 @@ const testUser = {
 
   it.only('signs up a user successfully', async () => {
     const newToken = await req.post('/api/auth/signup').send(testUser)
-    console.log(newToken.body)
-        // token = res.body.token;
-        // assert.isOk(token);
-      });
+    console.log(newToken.body.token)
+    assert.equal(newToken.statusCode, 200)
   }),
     it('checks credentials then retrieves the user', async () => {
       return saveUser(seedPeople[1]).then(person => {
