@@ -6,12 +6,23 @@ describe('media api', () => {
 
   before(db.drop);
 
-  let testImg = {
+  const mediaTestUser = {
+    email: 'media@test.com',
+    password: 'pword'
+  };
+
+  before(request
+    .post('/api/auth/signup', (req, res, next) => {
+
+    }
+  ))
+
+  const testImg = {
     description: 'testImg description',
     imgUrl: './media.test.js'
   };
 
-  let testVideo = {
+  const testVideo = {
     description: 'testVideo description',
     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
   };
