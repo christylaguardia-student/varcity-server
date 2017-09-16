@@ -1,18 +1,24 @@
-// const db = require('./_db');
-// const request = require('./_request');
-// const assert = require('chai').assert;
+
+const db = require('./_db');
+const request = require('./_request');
+const assert = require('chai').assert;
+const User = require('../../lib/models/User');
 
 // describe.skip('media api', () => {
 
 //   before(db.drop);
 
-//   const mediaTestUser = {
-//     email: 'media@test.com',
-//     password: 'pword'
-//   };
 
-//   let token = '';
-//   before();
+  let mediaTestUser = {
+    email: 'media@test.com',
+    password: 'pword'
+  };
+
+  let token = '';
+  before(async () => {
+    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
+  });
+  before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
 //   const testImg = {
 //     description: 'testImg description',
@@ -24,47 +30,58 @@
 //     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
 //   };
 
-//   function saveMedia(media) {
-//     const userId =
 
-//     return request
-//       .post(`/api/athletes/${userId}/media`)
-//       .send(media)
-//       .then(res => {
-//         let body = res.body;
-//         media._id = body._id;
-//         return media;
-//       });
-//   }
+  function saveMedia(media) {
+    const userId = mediaTestUser[0]._id;
+    return request
+    .post(`/api/athletes/${userId}/media`)
+    .set('Authorization', token)
+    .send(media)
+    .then(res => {
+      let body = res.body;
+      media._id = body._id;
+      return media;
+    });
+  }
+  
+  it('Initial /GET returns empty list', () => {
+    const userId = mediaTestUser[0]._id;    
+    return request.get(`/api/athletes/${userId}/media`)
+      .set('Authorization', token)
+      .then(req => {
+        const media = req.body;
+        assert.deepEqual(media, []);
+      });
+  });
 
-//   it('Initial /GET returns empty list', () => {
-//     return request.get('/api/athletes/:id/media')
-//       .then(req => {
-//         const media = req.body;
-//         assert.deepEqual(media, []);
-//       });
-//   });
+  it('saves an image', () => {
+    return saveMedia(testImg)
+      .then(saved => {
+        assert.deepEqual(saved, testImg);
+      });
+  });
 
-//   it('saves a card', () => {
-//     return saveMedia(testImg)
-//       .then(saved => {
-//         assert.deepEqual(saved, testImg);
-//       });
-//   });
+  xit('saves a video', () => {
+    return saveMedia(testVideo)
+      .then(saved => {
+        assert.deepEqual(saved, testVideo);
+      });
+  });
 
-//   it('Gets all media', () => {
-//     return Promise.all([
-//       saveMedia(testImg),
-//       saveMedia(testVideo)
-//     ])
-//       .then(savedMedia => {
-//         testImg = savedMedia[0];
-//         testVideo = savedMedia[1];
-//       })
-//       .then(() => request.get('/api/athletes/:id/media'))
-//       .then(res => res.body)
-//       .then(media => assert.deepEqual(media, [testImg, testVideo]));
-//   });
+  xit('Gets all media', () => {
+    return Promise.all([
+      saveMedia(testImg),
+      saveMedia(testVideo)
+    ])
+      .then(savedMedia => {
+        testImg = savedMedia[0];
+        testVideo = savedMedia[1];
+      })
+      .then(() => request.get('/api/athletes/:id/media'))
+      .then(res => res.body)
+      .then(media => assert.deepEqual(media, [testImg, testVideo]));
+  });
+
 
 //   xit('patches a card', () => {
 //     const url = `/api/cards/${testCard2._id}`;
