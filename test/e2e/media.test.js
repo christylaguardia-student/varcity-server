@@ -41,7 +41,7 @@ describe('media api', () => {
     });
   }
   
-  it.only('Initial /GET returns empty list', () => {
+  it('Initial /GET returns empty list', () => {
     const userId = mediaTestUser[0]._id;    
     return request.get(`/api/athletes/${userId}/media`)
       .set('Authorization', token)
@@ -51,10 +51,17 @@ describe('media api', () => {
       });
   });
 
-  xit('saves a card', () => {
+  it('saves an image', () => {
     return saveMedia(testImg)
       .then(saved => {
         assert.deepEqual(saved, testImg);
+      });
+  });
+
+  xit('saves a video', () => {
+    return saveMedia(testVideo)
+      .then(saved => {
+        assert.deepEqual(saved, testVideo);
       });
   });
 
