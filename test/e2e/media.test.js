@@ -1,11 +1,13 @@
+
 const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 
-describe('media api', () => {
+// describe.skip('media api', () => {
 
-  before(db.drop);
+//   before(db.drop);
+
 
   let mediaTestUser = {
     email: 'media@test.com',
@@ -18,15 +20,16 @@ describe('media api', () => {
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
-  const testImg = {
-    description: 'testImg description',
-    imgUrl: './media.test.js'
-  };
+//   const testImg = {
+//     description: 'testImg description',
+//     imgUrl: './media.test.js'
+//   };
 
-  const testVideo = {
-    description: 'testVideo description',
-    videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
-  };
+//   const testVideo = {
+//     description: 'testVideo description',
+//     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
+//   };
+
 
   function saveMedia(media) {
     const userId = mediaTestUser[0]._id;
@@ -79,22 +82,23 @@ describe('media api', () => {
       .then(media => assert.deepEqual(media, [testImg, testVideo]));
   });
 
-  xit('patches a card', () => {
-    const url = `/api/cards/${testCard2._id}`;
-    return request.patch(url)
-      .send({ genus: 'something else' })
-      .then(res => res.body)
-      .then(res => assert.deepEqual(res.genus, 'something else'));
-  });
 
-  xit('deletes a card', () => {
-    const url = `/api/cards/${testCard2._id}`;
-    return request.delete(url)
-      .then(res => {
-        assert.deepEqual(res.body, { removed: true });
-        return res;
-      })
-      .then(() => request.delete(url))
-      .then(res => assert.deepEqual(res.body, { removed: false }));
-  });
-});
+//   xit('patches a card', () => {
+//     const url = `/api/cards/${testCard2._id}`;
+//     return request.patch(url)
+//       .send({ genus: 'something else' })
+//       .then(res => res.body)
+//       .then(res => assert.deepEqual(res.genus, 'something else'));
+//   });
+
+//   xit('deletes a card', () => {
+//     const url = `/api/cards/${testCard2._id}`;
+//     return request.delete(url)
+//       .then(res => {
+//         assert.deepEqual(res.body, { removed: true });
+//         return res;
+//       })
+//       .then(() => request.delete(url))
+//       .then(res => assert.deepEqual(res.body, { removed: false }));
+//   });
+// });

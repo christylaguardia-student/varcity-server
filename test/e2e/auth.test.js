@@ -14,6 +14,10 @@ describe('user auth API', () => {
     email: 'tokenjoeTwo@joe.com',
     password: 'abc'
   };
+  const testUserThree = {
+    email: null,
+    password: 'qwerty'
+  };
 
   it('signs up a user successfully', async () => {
     const newToken = await req.post('/api/auth/signup').send(testUserOne);
@@ -22,7 +26,6 @@ describe('user auth API', () => {
   }),
     it('checks credentials then retrieves the user', async () => {
       const newToken = await req.post('/api/auth/signup').send(testUserTwo);
-      console.log('newToken: ', newToken.body.token);
       const verifiedUser = await req
         .post('/api/auth/signin')
         .set('Authorization', newToken.body.token)
@@ -30,14 +33,15 @@ describe('user auth API', () => {
       assert.equal(newToken.statusCode, 200);
       assert.isObject(newToken.body);
     }),
-    it.skip('fails if user forgets email or pw', async () => {
-      return req
-        .post('/users/verify')
-        .send(seedPeople[2])
-        .then(res => {
-          // console.log('verify: ',res.body);
-          assert.equal(res.code, 400);
-          assert.equal(res.error, 'Both email and password are required.');
-        });
+    it('fails to save user if forgets email or pw', async () => {
+      const failedPerson = await req
+        .post('/api/auth/verify')
+        .send(testUserThree);
+        console.log(failedPerson)
+      assert.equal(testUserThree.code, 400);
+      assert.equal(
+        testUserThree.error,
+        'Both email and password are required.'
+      );
     });
 });
