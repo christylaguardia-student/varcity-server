@@ -1,18 +1,22 @@
 const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
+const User = require('../../lib/models/User');
 
 describe('media api', () => {
 
   before(db.drop);
 
-  const mediaTestUser = {
+  let mediaTestUser = {
     email: 'media@test.com',
     password: 'pword'
   };
 
   let token = '';
-  before();
+  before(async () => {
+    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
+  });
+  before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
   const testImg = {
     description: 'testImg description',
@@ -25,34 +29,43 @@ describe('media api', () => {
   };
 
   function saveMedia(media) {
-    const userId = 
-
+    const userId = mediaTestUser[0]._id;
     return request
-      .post(`/api/athletes/${userId}/media`)
-      .send(media)
-      .then(res => {
-        let body = res.body;
-        media._id = body._id;
-        return media;
-      });
+    .post(`/api/athletes/${userId}/media`)
+    .set('Authorization', token)
+    .send(media)
+    .then(res => {
+      let body = res.body;
+      media._id = body._id;
+      return media;
+    });
   }
-
+  
   it('Initial /GET returns empty list', () => {
-    return request.get('/api/athletes/:id/media')
+    const userId = mediaTestUser[0]._id;    
+    return request.get(`/api/athletes/${userId}/media`)
+      .set('Authorization', token)
       .then(req => {
         const media = req.body;
         assert.deepEqual(media, []);
       });
   });
 
-  it('saves a card', () => {
+  it('saves an image', () => {
     return saveMedia(testImg)
       .then(saved => {
         assert.deepEqual(saved, testImg);
       });
   });
 
-  it('Gets all media', () => {
+  xit('saves a video', () => {
+    return saveMedia(testVideo)
+      .then(saved => {
+        assert.deepEqual(saved, testVideo);
+      });
+  });
+
+  xit('Gets all media', () => {
     return Promise.all([
       saveMedia(testImg),
       saveMedia(testVideo)
