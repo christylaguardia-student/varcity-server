@@ -4,10 +4,9 @@ const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 
-// describe.skip('media api', () => {
+describe('media api', () => {
 
-//   before(db.drop);
-
+  before(db.drop);
 
   let mediaTestUser = {
     email: 'media@test.com',
@@ -20,16 +19,17 @@ const User = require('../../lib/models/User');
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
-//   const testImg = {
-//     description: 'testImg description',
-//     imgUrl: './media.test.js'
-//   };
+  const testImg = {
+    description: 'testImg description',
+    mediaType: 'image upload',
+    imgUrl: './icons8-Basketball-64.png'
+  };
 
-//   const testVideo = {
-//     description: 'testVideo description',
-//     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
-//   };
-
+  const testVideo = {
+    description: 'testVideo description',
+    mediaType: 'video link',    
+    videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
+  };
 
   function saveMedia(media) {
     const userId = mediaTestUser[0]._id;
@@ -54,17 +54,17 @@ const User = require('../../lib/models/User');
       });
   });
 
-  it('saves an image', () => {
+  
+  it('saves a video', () => {
+    return saveMedia(testVideo)
+    .then(saved => assert.deepEqual(saved, testVideo));
+  });
+  
+  it.only('saves an image', () => {
     return saveMedia(testImg)
       .then(saved => {
+        console.log('saved is', saved);
         assert.deepEqual(saved, testImg);
-      });
-  });
-
-  xit('saves a video', () => {
-    return saveMedia(testVideo)
-      .then(saved => {
-        assert.deepEqual(saved, testVideo);
       });
   });
 
@@ -101,4 +101,4 @@ const User = require('../../lib/models/User');
 //       .then(() => request.delete(url))
 //       .then(res => assert.deepEqual(res.body, { removed: false }));
 //   });
-// });
+});

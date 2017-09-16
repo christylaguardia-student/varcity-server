@@ -9,8 +9,8 @@ describe('Media model', () => {
   xit('validates a good model', () => {
     const media = new Media({
       description: 'Test Desc',
-      videoUrl: 'youtubelink.com',
-      imgUrl: true
+      mediaType: 'video link',
+      videoUrl: 'youtubelink.com'
     });
     return media.validate();
   });
