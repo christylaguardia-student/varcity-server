@@ -1,4 +1,4 @@
-const Sport = ('../../lib/models/sport');
+const Sport = require('../../lib/models/sport');
 const { assert } = require('chai');
 
 describe('Sport model', () => {
