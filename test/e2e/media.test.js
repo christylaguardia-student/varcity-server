@@ -4,9 +4,9 @@ const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 
-// describe.skip('media api', () => {
+describe('media api', () => {
 
-//   before(db.drop);
+  before(db.drop);
 
 
   let mediaTestUser = {
@@ -20,10 +20,10 @@ const User = require('../../lib/models/User');
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
-//   const testImg = {
-//     description: 'testImg description',
-//     imgUrl: './media.test.js'
-//   };
+  const testImg = {
+    description: 'testImg description',
+    imgUrl: '/Users/webeck/Sites/work-cfpdx/maneki-neko/varcity-server/test/e2e/icons8-Basketball-64.png'
+  };
 
 //   const testVideo = {
 //     description: 'testVideo description',
@@ -43,9 +43,9 @@ const User = require('../../lib/models/User');
       return media;
     });
   }
-  
+
   it('Initial /GET returns empty list', () => {
-    const userId = mediaTestUser[0]._id;    
+    const userId = mediaTestUser[0]._id;
     return request.get(`/api/athletes/${userId}/media`)
       .set('Authorization', token)
       .then(req => {
@@ -55,8 +55,10 @@ const User = require('../../lib/models/User');
   });
 
   it('saves an image', () => {
+    // console.log('ti: ',testImg)
     return saveMedia(testImg)
       .then(saved => {
+        // console.log('saved: ', saved)
         assert.deepEqual(saved, testImg);
       });
   });
@@ -101,4 +103,4 @@ const User = require('../../lib/models/User');
 //       .then(() => request.delete(url))
 //       .then(res => assert.deepEqual(res.body, { removed: false }));
 //   });
-// });
+});
