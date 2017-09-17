@@ -4,7 +4,8 @@ const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 
-describe('media api', () => {
+describe('media api', function () {
+  this.timeout(5000);
 
   before(db.drop);
 
@@ -19,14 +20,26 @@ describe('media api', () => {
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
-  const testImg = {
+  let testImg = {
     description: 'testImg description',
     mediaType: 'image upload',
     img: '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
   };
 
-  const testVideo = {
+  let testVideo = {
     description: 'testVideo description',
+    mediaType: 'video link',    
+    videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
+  };
+
+  let newTestImg = {
+    description: 'New testImg description',
+    mediaType: 'image upload',
+    img: '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
+  };
+
+  let newTestVideo = {
+    description: 'New testVideo description',
     mediaType: 'video link',    
     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
   };
@@ -39,8 +52,6 @@ describe('media api', () => {
     .send(video)
     .then(res => {
       let body = res.body;
-      video._id = body._id;
-      console.log('saved video is', video);
       return video;
     });
   }
@@ -50,6 +61,8 @@ describe('media api', () => {
     return request
     .post(`/api/athletes/${userId}/media`)
     .set('Authorization', token)
+    .field('description', image.description)
+    .field('mediaType', image.mediaType)
     .attach('image', image.img)
     .then(res => {
       let body = res.body;
@@ -74,43 +87,45 @@ describe('media api', () => {
   
   it('saves an image', () => {
     return saveImage(testImg)
-      .then(saved => {
-        console.log('saved is', saved);
-        assert.deepEqual(saved, testImg);
-      });
+      .then(saved => assert.deepEqual(saved, testImg));
   });
 
-  xit('Gets all media', () => {
+  it('Gets all media', () => {
     return Promise.all([
-      saveMedia(testImg),
-      saveMedia(testVideo)
+      saveImage(newTestImg),
+      saveVideo(newTestVideo)
     ])
       .then(savedMedia => {
-        testImg = savedMedia[0];
-        testVideo = savedMedia[1];
+        newTestImg = savedMedia[0];
+        newTestVideo = savedMedia[1];
       })
-      .then(() => request.get('/api/athletes/:id/media'))
-      .then(res => res.body)
-      .then(media => assert.deepEqual(media, [testImg, testVideo]));
+      .then(() => request.get('/api/athletes/:id/media')
+        .set('Authorization', token)
+        .then(res => res.body)
+        .then(media => {
+          assert.deepEqual(media[1].description, testImg.description);
+          assert.deepEqual(media[2], newTestVideo);
+        })
+    );
   });
 
 
-//   xit('patches a card', () => {
-//     const url = `/api/cards/${testCard2._id}`;
-//     return request.patch(url)
-//       .send({ genus: 'something else' })
-//       .then(res => res.body)
-//       .then(res => assert.deepEqual(res.genus, 'something else'));
-//   });
+  xit('patches a media', () => {
+    const userId = mediaTestUser[0]._id;    
+    return request.patch(url)
+      .send({ genus: 'something else' })
+      .then(res => res.body)
+      .then(res => assert.deepEqual(res.genus, 'something else'));
+  });
 
-//   xit('deletes a card', () => {
-//     const url = `/api/cards/${testCard2._id}`;
-//     return request.delete(url)
-//       .then(res => {
-//         assert.deepEqual(res.body, { removed: true });
-//         return res;
-//       })
-//       .then(() => request.delete(url))
-//       .then(res => assert.deepEqual(res.body, { removed: false }));
-//   });
+  xit('deletes a piece of media', () => {
+    const userId = mediaTestUser[0]._id;    
+    return request.delete(url)
+      .then(res => {
+        assert.deepEqual(res.body, { removed: true });
+        return res;
+      })
+      .then(() => request.delete(url))
+      .then(res => assert.deepEqual(res.body, { removed: false }));
+  });
 });
