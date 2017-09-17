@@ -40,6 +40,7 @@ describe('media api', () => {
     .then(res => {
       let body = res.body;
       video._id = body._id;
+      console.log('saved video is', video);
       return video;
     });
   }
@@ -52,7 +53,6 @@ describe('media api', () => {
     .attach('image', image.img)
     .then(res => {
       let body = res.body;
-      // image._id = body._id;
       return image;
     });
   }
