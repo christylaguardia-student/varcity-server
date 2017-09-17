@@ -4,8 +4,7 @@ const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 
-describe('media api', function () {
-  this.timeout(5000);
+describe('media api', () => {
 
   before(db.drop);
 
@@ -69,9 +68,9 @@ describe('media api', function () {
       return image;
     });
   }
-  
+
   it('Initial /GET returns empty list', () => {
-    const userId = mediaTestUser[0]._id;    
+    const userId = mediaTestUser[0]._id;
     return request.get(`/api/athletes/${userId}/media`)
       .set('Authorization', token)
       .then(req => {
