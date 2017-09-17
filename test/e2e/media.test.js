@@ -2,6 +2,8 @@ const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
+// const fs = require('fs');
+const path = require('path');
 
 describe('media api', () => {
 
@@ -17,11 +19,13 @@ describe('media api', () => {
     token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
+  
+  const imagePath = path.join(__dirname, '/icons8-Basketball-64.png');
 
   let testImg = {
     description: 'testImg description',
     mediaType: 'image upload',
-    img: '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
+    img: imagePath
   };
 
   let testVideo = {
@@ -33,7 +37,7 @@ describe('media api', () => {
   let newTestImg = {
     description: 'New testImg description',
     mediaType: 'image upload',
-    img: '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
+    img: imagePath
   };
 
   let newTestVideo = {
@@ -74,7 +78,6 @@ describe('media api', () => {
       .set('Authorization', token)
       .then(req => {
         const media = req.body;
-        console.log('media is', media);
         assert.deepEqual(media, []);
       });
   });
@@ -102,7 +105,7 @@ describe('media api', () => {
         .set('Authorization', token)
         .then(res => res.body)
         .then(media => {
-          assert.deepEqual(media[1].description, testImg.description);
+          assert.deepEqual(media[3].description, newTestImg.description);
           assert.deepEqual(media[2], newTestVideo);
         })
     );
