@@ -1,4 +1,3 @@
-
 const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
@@ -15,7 +14,7 @@ describe('media api', () => {
 
   let token = '';
   before(async () => {
-    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body);
+    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
@@ -75,6 +74,7 @@ describe('media api', () => {
       .set('Authorization', token)
       .then(req => {
         const media = req.body;
+        console.log('media is', media);
         assert.deepEqual(media, []);
       });
   });
