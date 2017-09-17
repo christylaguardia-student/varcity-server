@@ -72,7 +72,7 @@ describe('media api', () => {
     .then(saved => assert.deepEqual(saved, testVideo));
   });
   
-  it.only('saves an image', () => {
+  it('saves an image', () => {
     return saveImage(testImg)
       .then(saved => {
         console.log('saved is', saved);
