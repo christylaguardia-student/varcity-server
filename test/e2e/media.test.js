@@ -4,7 +4,7 @@ const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 
-describe.skip('media api', () => {
+describe('media api', () => {
 
   before(db.drop);
 
@@ -22,7 +22,7 @@ describe.skip('media api', () => {
 
   const testImg = {
     description: 'testImg description',
-    imgUrl: './media.test.js'
+    imgUrl: '/Users/webeck/Sites/work-cfpdx/maneki-neko/varcity-server/test/e2e/icons8-Basketball-64.png'
   };
 
 //   const testVideo = {
@@ -55,8 +55,10 @@ describe.skip('media api', () => {
   });
 
   it('saves an image', () => {
+    // console.log('ti: ',testImg)
     return saveMedia(testImg)
       .then(saved => {
+        // console.log('saved: ', saved)
         assert.deepEqual(saved, testImg);
       });
   });
