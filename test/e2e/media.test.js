@@ -16,7 +16,7 @@ describe('media api', function () {
 
   let token = '';
   before(async () => {
-    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
+    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body);
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
 
