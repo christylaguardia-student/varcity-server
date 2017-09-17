@@ -1,13 +1,13 @@
-
 const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
+// const fs = require('fs');
+const path = require('path');
 
 describe('media api', () => {
 
   before(db.drop);
-
 
   let mediaTestUser = {
     email: 'media@test.com',
@@ -19,28 +19,56 @@ describe('media api', () => {
     token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
   });
   before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
+  
+  const imagePath = path.join(__dirname, '/icons8-Basketball-64.png');
 
-  const testImg = {
+  let testImg = {
     description: 'testImg description',
-    imgUrl: '/Users/webeck/Sites/work-cfpdx/maneki-neko/varcity-server/test/e2e/icons8-Basketball-64.png'
+    mediaType: 'image upload',
+    img: imagePath
   };
 
-//   const testVideo = {
-//     description: 'testVideo description',
-//     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
-//   };
+  let testVideo = {
+    description: 'testVideo description',
+    mediaType: 'video link',    
+    videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
+  };
 
+  let newTestImg = {
+    description: 'New testImg description',
+    mediaType: 'image upload',
+    img: imagePath
+  };
 
-  function saveMedia(media) {
+  let newTestVideo = {
+    description: 'New testVideo description',
+    mediaType: 'video link',    
+    videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
+  };
+
+  function saveVideo(video) {
     const userId = mediaTestUser[0]._id;
     return request
     .post(`/api/athletes/${userId}/media`)
     .set('Authorization', token)
-    .send(media)
+    .send(video)
     .then(res => {
       let body = res.body;
-      media._id = body._id;
-      return media;
+      return video;
+    });
+  }
+
+  function saveImage(image) {
+    const userId = mediaTestUser[0]._id;
+    return request
+    .post(`/api/athletes/${userId}/media`)
+    .set('Authorization', token)
+    .field('description', image.description)
+    .field('mediaType', image.mediaType)
+    .attach('image', image.img)
+    .then(res => {
+      let body = res.body;
+      return image;
     });
   }
 
@@ -54,53 +82,52 @@ describe('media api', () => {
       });
   });
 
+  it('saves a video', () => {
+    return saveVideo(testVideo)
+    .then(saved => assert.deepEqual(saved, testVideo));
+  });
+  
   it('saves an image', () => {
-    // console.log('ti: ',testImg)
-    return saveMedia(testImg)
-      .then(saved => {
-        // console.log('saved: ', saved)
-        assert.deepEqual(saved, testImg);
-      });
+    return saveImage(testImg)
+      .then(saved => assert.deepEqual(saved, testImg));
   });
 
-  xit('saves a video', () => {
-    return saveMedia(testVideo)
-      .then(saved => {
-        assert.deepEqual(saved, testVideo);
-      });
-  });
-
-  xit('Gets all media', () => {
+  it('Gets all media', () => {
     return Promise.all([
-      saveMedia(testImg),
-      saveMedia(testVideo)
+      saveImage(newTestImg),
+      saveVideo(newTestVideo)
     ])
       .then(savedMedia => {
-        testImg = savedMedia[0];
-        testVideo = savedMedia[1];
+        newTestImg = savedMedia[0];
+        newTestVideo = savedMedia[1];
       })
-      .then(() => request.get('/api/athletes/:id/media'))
-      .then(res => res.body)
-      .then(media => assert.deepEqual(media, [testImg, testVideo]));
+      .then(() => request.get('/api/athletes/:id/media')
+        .set('Authorization', token)
+        .then(res => res.body)
+        .then(media => {
+          assert.deepEqual(media[3].description, newTestImg.description);
+          assert.deepEqual(media[2], newTestVideo);
+        })
+    );
   });
 
 
-//   xit('patches a card', () => {
-//     const url = `/api/cards/${testCard2._id}`;
-//     return request.patch(url)
-//       .send({ genus: 'something else' })
-//       .then(res => res.body)
-//       .then(res => assert.deepEqual(res.genus, 'something else'));
-//   });
+  xit('patches a media', () => {
+    const userId = mediaTestUser[0]._id;    
+    return request.patch(url)
+      .send({ genus: 'something else' })
+      .then(res => res.body)
+      .then(res => assert.deepEqual(res.genus, 'something else'));
+  });
 
-//   xit('deletes a card', () => {
-//     const url = `/api/cards/${testCard2._id}`;
-//     return request.delete(url)
-//       .then(res => {
-//         assert.deepEqual(res.body, { removed: true });
-//         return res;
-//       })
-//       .then(() => request.delete(url))
-//       .then(res => assert.deepEqual(res.body, { removed: false }));
-//   });
+  xit('deletes a piece of media', () => {
+    const userId = mediaTestUser[0]._id;    
+    return request.delete(url)
+      .then(res => {
+        assert.deepEqual(res.body, { removed: true });
+        return res;
+      })
+      .then(() => request.delete(url))
+      .then(res => assert.deepEqual(res.body, { removed: false }));
+  });
 });

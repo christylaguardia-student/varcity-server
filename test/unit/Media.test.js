@@ -9,8 +9,8 @@ describe('Media model', () => {
   xit('validates a good model', () => {
     const media = new Media({
       description: 'Test Desc',
-      videoUrl: 'youtubelink.com',
-      imgUrl: true
+      mediaType: 'video link',
+      videoUrl: 'youtubelink.com'
     });
     return media.validate();
   });
@@ -23,8 +23,8 @@ describe('Media model', () => {
         .then(expectedValidation,
           err => {
             const errors = err.errors;
-            assert.ok(errors.description && errors.videoUrl && errors.imgUrl);
-            assert.equal(errors.description.kind && errors.videoUrl.kind && errors.imgUrl.kind, 'required');
+            assert.ok(errors.description && errors.videoUrl && errors.img);
+            assert.equal(errors.description.kind && errors.videoUrl.kind && errors.img.kind, 'required');
           });
     });
   });
