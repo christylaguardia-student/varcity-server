@@ -2,7 +2,7 @@ const request = require('./_request');
 const { assert } = require('chai');
 const db = require('./_db');
 
-describe('edu REST api', () => {
+describe.skip('edu REST api', () => {
   before(db.drop);
 
   // let token = null;
