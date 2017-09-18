@@ -1,7 +1,9 @@
-const { drop } = require('./_db');
+const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
+// const fs = require('fs');
+const path = require('path');
 
 describe.skip('media api', () => {
   let mediaTestUser = {
@@ -12,27 +14,18 @@ describe.skip('media api', () => {
   let token = '';
 before(drop)
   before(async () => {
-    token = await request
-      .post('/api/auth/signup')
-      .send(mediaTestUser)
-      .then(res => token = res.body.token);
-    mediaTestUser = await request
-      .post('/api/auth/signin')
-      .set('Authorization', token);
 
-      console.log('mtu: ', mediaTestUser.body);
-      request.getUser.find({ email: 'media@test.com'})
-      .then(result => result);
-      console.log('result: ', result)
-
-    // return;
+    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
   });
+  before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
+  
+  const imagePath = path.join(__dirname, '/icons8-Basketball-64.png');
 
   let testImg = {
     description: 'testImg description',
     mediaType: 'image upload',
-    img:
-      '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
+
+    img: imagePath
   };
 
   let testVideo = {
@@ -44,8 +37,8 @@ before(drop)
   let newTestImg = {
     description: 'New testImg description',
     mediaType: 'image upload',
-    img:
-      '/Users/fitzgerald/Documents/CodeFellows/401/varsity-container-folder/varcity-server/test/e2e/icons8-Basketball-64.png'
+
+    img: imagePath
   };
 
   let newTestVideo = {
@@ -107,16 +100,15 @@ before(drop)
         newTestImg = savedMedia[0];
         newTestVideo = savedMedia[1];
       })
-      .then(() =>
-        request
-          .get('/api/athletes/:id/media')
-          .set('Authorization', token)
-          .then(res => res.body)
-          .then(media => {
-            assert.deepEqual(media[1].description, testImg.description);
-            assert.deepEqual(media[2], newTestVideo);
-          })
-      );
+
+      .then(() => request.get('/api/athletes/:id/media')
+        .set('Authorization', token)
+        .then(res => res.body)
+        .then(media => {
+          assert.deepEqual(media[3].description, newTestImg.description);
+          assert.deepEqual(media[2], newTestVideo);
+        })
+    );
   });
 
   xit('patches a media', () => {
