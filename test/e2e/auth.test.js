@@ -4,7 +4,7 @@ const assert = chai.assert;
 const { drop } = require('./_db');
 
 describe('user auth API', () => {
-  before(async () => drop());
+  before(drop);
 
   const testUserOne = {
     email: 'tokenjoeOne@joe.com',
@@ -19,17 +19,22 @@ describe('user auth API', () => {
     password: 'qwerty'
   };
 
-  it('signs up a user successfully', async () => {
-    const newToken = await req.post('/api/auth/signup').send(testUserOne);
-    assert.equal(newToken.statusCode, 200);
-    assert.isObject(newToken.body);
+  it('signs up a user successfully', () => {
+    return req
+      .post('/api/auth/signup')
+      .send(testUserOne)
+      .then(newToken => {
+        assert.equal(newToken.statusCode, 200);
+        assert.isObject(newToken.body);
+      });
   }),
-    it('checks credentials then retrieves the user', async () => {
-      const newToken = await req.post('/api/auth/signup').send(testUserTwo);
-      const verifiedUser = await req
-        .post('/api/auth/signin')
-        .set('Authorization', newToken.body.token)
-        .send(testUserTwo);
+    it('checks credentials then retrieves the user', () => {
+      return req
+        .post('/api/auth/signup')
+        .send(testUserTwo)
+        .then(user => {
+          req.post('/api/auth/signin').set('Authorization', user.body.token);
+        });
       assert.equal(newToken.statusCode, 200);
       assert.isObject(newToken.body);
     }),
