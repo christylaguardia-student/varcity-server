@@ -45,6 +45,7 @@
     * i.e. There should be nothing showing in the console after deployment
 * Be sure to eslint-ignore any necessary consoles
 * Remove all your comments before merging to master (preferably before merging to dev)
+* mLab database on Heroku is Varcity
 
 ### Time Management
 * Pair in the morning, then split out
