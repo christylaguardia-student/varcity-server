@@ -1,7 +1,7 @@
 const Edu = require('../../lib/models/edu');
 const { assert } = require('chai');
 
-describe('Sport model', () => {
+describe('Edu model', () => {
   it('validates required fields', () => {
     const edu = new Edu({
       institution: 'Harvard'
