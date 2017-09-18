@@ -3,7 +3,7 @@ const { getCountries, getStates, getCities } = require('../../lib/utils/geodata'
 
 // Note: es6 arrow functions don't work with this.timeout
 
-describe.only('geodata api service', function() {
+describe('geodata api service', function() {
   this.timeout(5000);
   
   describe('countries', function() {
