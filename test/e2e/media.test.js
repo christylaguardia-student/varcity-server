@@ -12,7 +12,7 @@ describe.skip('media api', () => {
   };
 
   let token = '';
-before(drop)
+before(db.drop)
   before(async () => {
 
     token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
