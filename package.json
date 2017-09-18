@@ -23,6 +23,7 @@
     "chai-http": "^3.0.0",
     "eslint": "^4.6.1",
     "mocha": "^3.5.3",
+    "superagent": "^3.6.0",
     "nodemon": "^1.12.1"
   },
   "scripts": {
