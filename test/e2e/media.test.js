@@ -5,14 +5,14 @@ const User = require('../../lib/models/User');
 // const fs = require('fs');
 const path = require('path');
 
-describe.skip('media api', () => {
+describe('media api', () => {
   let mediaTestUser = {
     email: 'media@test.com',
     password: 'pword'
   };
 
   let token = '';
-before(drop)
+before(db.drop)
   before(async () => {
 
     token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
