@@ -1,0 +1,69 @@
+{
+  "info" : {
+    "firstName": "Christy",
+    "lastName": "La Guardia",
+    "public": true,
+    "profileUrl": "http://google.com/",
+    "primarySport": "Basketball - Girl's",
+    "position": "Center",
+    "person": {
+      "dob": "04/23/1987",
+      "gender": "female",
+      "height": "10",
+      "heightUom": "cm",
+      "weight": "10",
+      "weightUom": "kg"
+    },
+    "organization": "Alchemy Code Lab",
+    "location": {
+      "city": "Portland",
+      "state": "Oregon",
+      "country": "United State"
+    },
+    "socials": {
+      "facebookUrl": "http://google.com/",
+      "twitterUrl": "http://google.com/",
+      "instagramUrl": "http://google.com/"
+    }
+  },
+  "bio": {
+    "about": "Hi, my name is Christy.",
+    "awards": "Best writer of this JSON object."
+  },
+  "edu": {
+    "institution": "Alchemy Code Lab",
+    "year": "2017", 
+    "address": {
+      "city": "Portland",
+      "state": "Oregon",
+      "country": "United State"
+    }, 
+    "degree": "Graduate degree"
+    },
+    "testScores": {
+      "SAT": {
+        "reading": 1000,
+        "math": 1000,
+        "writing": 1000
+      },
+      "ACT": {
+        "reading": 1000,
+        "math": 1000,
+        "writing": 1000,
+        "science": 1000
+      }
+  },
+  "sports": [],
+  "media": [
+    {
+      "description": "here's a video of me doing sports",
+      "mediaType": "video link",
+      "videoUrl": "http://google.com/"
+    },
+    {
+      "description": "here's an image of me doing sports",
+      "mediaType": "image upload",
+      "img": "Buffer"
+    }
+  ]
+}
