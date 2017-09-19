@@ -1,28 +1,29 @@
 {
-  "env": {
-    "node": true,
-    "mocha": true,
-    "es6": true,
-    "browser": true
-  },
-  "extends": "eslint:recommended",
-  "rules": {
-    "no-console": "warn",
-    "indent": [
+  "extends": [
+    "eslint:recommended",
+    "react-app"
+  ],
+    "rules": {
+      "no-console": "warn",
+      "indent": [
         "error",
-        2 
+        2,
+        {
+          "SwitchCase": 1
+        }
     ],
     "linebreak-style": [
-        "error",
-        "windows"
+      "error",
+      "unix"
     ],
     "quotes": [
-        "error",
-        "single"
+      "error",
+      "single"
     ],
     "semi": [
-        "error",
-        "always"
+      "error",
+      "always"
     ]
   }
 }
+  
