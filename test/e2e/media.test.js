@@ -4,27 +4,42 @@ const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 // const fs = require('fs');
 const path = require('path');
+const { drop } = require('./_db');
 
-describe.skip('media api', () => {
+describe('media api', () => {
   let mediaTestUser = {
     email: 'media@test.com',
     password: 'pword'
   };
 
   let token = '';
-before(drop)
+  before(drop);
   before(async () => {
-
-    token = await request.post('/api/auth/signup').send(mediaTestUser).then(res => res.body.token);
+    return request
+      .post('/api/auth/signup')
+      .send(mediaTestUser)
+      .then(token => {
+        return ({ token } = token.body.token);
+      })
+      .then(token => {
+        return request
+          .post('/api/auth/signin')
+          .set('Authorization', token)
+          .then(user => {
+            mediaTestUser = user.body;
+            mediaTestUser.token = token;
+            return mediaTestUser;
+          });
+        return mediaTestUser;
+      });
+    return mediaTestUser;
   });
-  before(async () => mediaTestUser = await User.find({ email: 'media@test.com'}))
-  
+
   const imagePath = path.join(__dirname, '/icons8-Basketball-64.png');
 
   let testImg = {
     description: 'testImg description',
     mediaType: 'image upload',
-
     img: imagePath
   };
 
@@ -37,7 +52,6 @@ before(drop)
   let newTestImg = {
     description: 'New testImg description',
     mediaType: 'image upload',
-
     img: imagePath
   };
 
@@ -48,9 +62,10 @@ before(drop)
   };
 
   function saveVideo(video) {
-    const userId = mediaTestUser[0]._id;
+    const { _id } = mediaTestUser.user;
+    const token = mediaTestUser.token;
     return request
-      .post(`/api/athletes/${userId}/media`)
+      .post(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
       .send(video)
       .then(res => {
@@ -60,9 +75,10 @@ before(drop)
   }
 
   function saveImage(image) {
-    const userId = mediaTestUser[0]._id;
+    const { _id } = mediaTestUser.user;
+    const token = mediaTestUser.token;
     return request
-      .post(`/api/athletes/${userId}/media`)
+      .post(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
       .field('description', image.description)
       .field('mediaType', image.mediaType)
@@ -74,9 +90,10 @@ before(drop)
   }
 
   it('Initial /GET returns empty list', () => {
-    const userId = mediaTestUser[0]._id;
+    const { _id } = mediaTestUser.user;
+    const token = mediaTestUser.token;
     return request
-      .get(`/api/athletes/${userId}/media`)
+      .get(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
       .then(req => {
         const media = req.body;
@@ -95,24 +112,28 @@ before(drop)
   });
 
   it('Gets all media', () => {
+    const { _id } = mediaTestUser.user;
+    const token = mediaTestUser.token;
+
     return Promise.all([saveImage(newTestImg), saveVideo(newTestVideo)])
       .then(savedMedia => {
         newTestImg = savedMedia[0];
         newTestVideo = savedMedia[1];
       })
-
-      .then(() => request.get('/api/athletes/:id/media')
-        .set('Authorization', token)
-        .then(res => res.body)
-        .then(media => {
-          assert.deepEqual(media[3].description, newTestImg.description);
-          assert.deepEqual(media[2], newTestVideo);
-        })
-    );
+      .then(() =>
+        request
+          .get(`/api/athletes/${_id}/media`)
+          .set('Authorization', token)
+          .then(res => res.body)
+          .then(media => {
+            assert.deepEqual(media[3].description, newTestImg.description);
+            assert.deepEqual(media[2], newTestVideo);
+          })
+      );
   });
 
   xit('patches a media', () => {
-    const userId = mediaTestUser[0]._id;
+    const userId = mediaTestUser._id;
     return request
       .patch(url)
       .send({ genus: 'something else' })
@@ -121,7 +142,7 @@ before(drop)
   });
 
   xit('deletes a piece of media', () => {
-    const userId = mediaTestUser[0]._id;
+    const userId = mediaTestUser._id;
     return request
       .delete(url)
       .then(res => {
