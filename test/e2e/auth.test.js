@@ -40,11 +40,11 @@ describe('user auth API', () => {
     }),
     it('fails to save user if forgets email or pw', async () => {
       const failedPerson = await req
-        .post('/api/auth/verify')
+        .post('/api/auth/signup')
         .send(testUserThree);
       assert.equal(failedPerson.body.code, 401);
       assert.equal(
-        failedPerson.body.message,
+        failedPerson.body.name,
         'Both email and password are required.'
       );
     });
