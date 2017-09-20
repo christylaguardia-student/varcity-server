@@ -5,6 +5,7 @@ const User = require('../../lib/models/User');
 // const fs = require('fs');
 const path = require('path');
 const { drop } = require('./_db');
+const {verify} = require('../../lib/auth/token-service')
 
 describe('media api', () => {
   let mediaTestUser = {
@@ -22,6 +23,8 @@ describe('media api', () => {
         return ({ token } = token.body.token);
       })
       .then(token => {
+        console.log(55, token.body.token)
+
         return request
           .post('/api/auth/signin')
           .set('Authorization', token)
@@ -90,8 +93,10 @@ describe('media api', () => {
   }
 
   it('Initial /GET returns empty list', () => {
-    const { _id } = mediaTestUser.user;
-    const token = mediaTestUser.token;
+    console.log('mtu: ', mediaTestUser)
+    // const id = mediaTestUser;
+    const token = mediaTestUser;
+    console.log(99, token);
     return request
       .get(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
