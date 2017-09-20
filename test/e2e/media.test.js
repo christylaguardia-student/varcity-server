@@ -6,14 +6,14 @@ const User = require('../../lib/models/User');
 const path = require('path');
 const { drop } = require('./_db');
 
-describe('media api', () => {
+describe.only('media api', () => {
   let mediaTestUser = {
     email: 'media@test.com',
     password: 'pword'
   };
 
   let token = '';
-  before(drop);
+  before(db.drop);
   before(async () => {
     return request
       .post('/api/auth/signup')
