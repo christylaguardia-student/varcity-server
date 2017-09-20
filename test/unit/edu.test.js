@@ -1,4 +1,4 @@
-const Edu = require('../../lib/models/edu');
+const Edu = require('../../lib/models/Edu');
 const { assert } = require('chai');
 
 describe.skip('Edu model', () => {
