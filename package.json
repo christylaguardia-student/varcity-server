@@ -1,11 +1,11 @@
 {
-  "name": "varcity-server",
+  "name": "server",
   "version": "1.0.0",
   "engines": {
     "node": ">8.0.0"
   },
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "directories": {
     "lib": "lib"
   },
