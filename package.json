@@ -43,6 +43,5 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/varcity-network/varcity-server/issues"
-  },
-  "homepage": "https://github.com/varcity-network/varcity-server#readme"
+  }
 }
