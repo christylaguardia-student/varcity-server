@@ -24,9 +24,7 @@
       "facebookUrl": "http://google.com/",
       "twitterUrl": "http://google.com/",
       "instagramUrl": "http://google.com/"
-    }
-  },
-  "bio": {
+    },
     "about": "Hi, my name is Christy.",
     "awards": "Best writer of this JSON object."
   },
