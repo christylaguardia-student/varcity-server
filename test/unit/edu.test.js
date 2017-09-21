@@ -1,7 +1,11 @@
-const Edu = require('../../lib/models/Edu');
+const EduSchema = require('../../lib/models/Edu');
 const { assert } = require('chai');
+const mongoose = require('mongoose');
 
-describe.skip('Edu model', () => {
+describe('Edu model', () => {
+
+  const Edu = mongoose.model('Edu', EduSchema);
+
   it('validates required fields', () => {
     const edu = new Edu({
       institution: 'Harvard'

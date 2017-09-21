@@ -1,19 +1,5 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
-*~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
-.nfs*
-
 # dependencies
 /node_modules
 
@@ -30,13 +16,11 @@
 .env.test.local
 .env.production.local
 .env
-.eslintrc
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.eslintrc
+.vscode/settings.json
