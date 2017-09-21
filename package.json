@@ -30,7 +30,7 @@
     "test:e2e": "mocha test/e2e",
     "test:unit": "mocha test/unit",
     "test": "mocha test --recursive",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
