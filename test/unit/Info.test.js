@@ -1,7 +1,10 @@
 const assert = require('chai').assert;
-const Info = require('../../lib/models/Info');
+const InfoSchema = require('../../lib/models/Info');
+const mongoose = require('mongoose');
 
-describe.skip('Info Model', () => {
+describe('Info Model', () => {
+
+  const Info = mongoose.model('Info', InfoSchema);
 
   it('validates with required fields', () => {
     const info = new Info({
@@ -31,7 +34,7 @@ describe.skip('Info Model', () => {
       lastName: 'La Guardia',
       public: true,
       profileUrl: 'http://www.laguardia.io/images/main/paper-plane-blue-120px.jpg',
-      primarySport: 'Women\'s Volleyball',
+      primarySport: 'Volleyball - Women\'s',
       position: 'I dunno',
       person: {
         dob: new Date(4, 23, 1987),
@@ -50,7 +53,9 @@ describe.skip('Info Model', () => {
         facebookUrl: 'http://facebook.com',
         twitterUrl: 'http://twitter.com',
         instagramUrl: 'http://instagram.com'
-      }
+      },
+      about: 'Hi my name is christy. I love beagles and ice cream.',
+      awards: '#1 walker of my dog'
     });
 
     return info.validate();
