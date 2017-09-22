@@ -2,7 +2,6 @@ const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 const User = require('../../lib/models/User');
-// const fs = require('fs');
 const path = require('path');
 const { drop } = require('./_db');
 const {verify} = require('../../lib/auth/token-service')
@@ -80,7 +79,7 @@ describe('media api', () => {
     const { _id } = mediaTestUser.user;
     const token = mediaTestUser.token;
     return request
-      .post(`/api/athletes/${_id}/media`)
+      .patch(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
       .field('description', image.description)
       .field('mediaType', image.mediaType)
