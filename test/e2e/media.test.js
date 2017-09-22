@@ -4,7 +4,8 @@ const assert = require('chai').assert;
 const User = require('../../lib/models/User');
 const path = require('path');
 const { drop } = require('./_db');
-const {verify} = require('../../lib/auth/token-service')
+const {verify} = require('../../lib/auth/token-service');
+const fs = require('fs');
 
 describe('media api', () => {
   let mediaTestUser = {
@@ -40,25 +41,25 @@ describe('media api', () => {
 
   let testImg = {
     description: 'testImg description',
-    mediaType: 'image upload',
-    img: imagePath
+    mediaType: 'Image Upload',
+    image: imagePath
   };
 
   let testVideo = {
     description: 'testVideo description',
-    mediaType: 'video link',
+    mediaType: 'Video Link',
     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
   };
 
   let newTestImg = {
     description: 'New testImg description',
-    mediaType: 'image upload',
-    img: imagePath
+    mediaType: 'Image Upload',
+    image: imagePath
   };
 
   let newTestVideo = {
     description: 'New testVideo description',
-    mediaType: 'video link',
+    mediaType: 'Video Link',
     videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
   };
 
@@ -66,7 +67,7 @@ describe('media api', () => {
     const { _id } = mediaTestUser.user;
     const token = mediaTestUser.token;
     return request
-      .post(`/api/athletes/${_id}/media`)
+      .patch(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
       .send(video)
       .then(res => {
@@ -76,14 +77,15 @@ describe('media api', () => {
   }
 
   function saveImage(image) {
-    const { _id } = mediaTestUser.user;
+    const _id = mediaTestUser.user.user._id;
     const token = mediaTestUser.token;
+    const buffer = fs.readFileSync(imagePath);    
     return request
       .patch(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
+      .attach('image', buffer)
       .field('description', image.description)
       .field('mediaType', image.mediaType)
-      .attach('image', image.img)
       .then(res => {
         let body = res.body;
         return image;
@@ -109,7 +111,7 @@ describe('media api', () => {
     );
   });
 
-  it('saves an image', () => {
+  it.only('saves an image', () => {
     return saveImage(testImg).then(saved => assert.deepEqual(saved, testImg));
   });
 
