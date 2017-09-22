@@ -14,7 +14,7 @@ describe('media api', () => {
   };
 
   let token = '';
-  before(db.drop);
+  before(drop);
   before(async () => {
     return request
       .post('/api/auth/signup')
