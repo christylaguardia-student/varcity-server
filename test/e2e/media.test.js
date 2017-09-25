@@ -5,7 +5,7 @@ const User = require('../../lib/models/User');
 const path = require('path');
 const { drop } = require('./_db');
 const {verify} = require('../../lib/auth/token-service');
-const fs = require('fs');
+
 
 describe('media api', () => {
   let mediaTestUser = {
@@ -37,12 +37,10 @@ describe('media api', () => {
     return mediaTestUser;
   });
 
-  const imagePath = path.join(__dirname, '/icons8-Basketball-64.png');
-
   let testImg = {
     description: 'testImg description',
-    mediaType: 'Image Upload',
-    image: imagePath
+    mediaType: 'Image Link',
+    imageUrl: 'www.image.com'
   };
 
   let testVideo = {
@@ -53,17 +51,17 @@ describe('media api', () => {
 
   let newTestImg = {
     description: 'New testImg description',
-    mediaType: 'Image Upload',
-    image: imagePath
+    mediaType: 'Image Link',
+    imageUrl: 'www.newimage.com'
   };
 
   let newTestVideo = {
     description: 'New testVideo description',
     mediaType: 'Video Link',
-    videoUrl: 'https://youtu.be/rNRFQ9mtEw4'
+    videoUrl: 'https://4.vimeo.com'
   };
 
-  function saveVideo(video) {
+  function saveMedia(media) {
     const { _id } = mediaTestUser.user;
     const token = mediaTestUser.token;
     return request
@@ -111,7 +109,7 @@ describe('media api', () => {
     );
   });
 
-  it.only('saves an image', () => {
+  it('saves an image', () => {
     return saveImage(testImg).then(saved => assert.deepEqual(saved, testImg));
   });
 
