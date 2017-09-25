@@ -1,11 +1,6 @@
-const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
-const User = require('../../lib/models/User');
-const path = require('path');
 const { drop } = require('./_db');
-const {verify} = require('../../lib/auth/token-service');
-
 
 describe('media api', () => {
   let mediaTestUser = {
@@ -15,26 +10,14 @@ describe('media api', () => {
 
   let token = '';
   before(drop);
-  before(async () => {
+  before(() => {
     return request
       .post('/api/auth/signup')
       .send(mediaTestUser)
-      .then(token => {
-        return token.body;
-      })
-      .then(tokenizedUser => {
-        token = tokenizedUser.token
-        return request
-          .post('/api/auth/signin')
-          .set('Authorization', token)
-          .then(user => {
-            mediaTestUser = user.body;
-            mediaTestUser.token = token
-            return mediaTestUser;
-          });
-        return mediaTestUser;
+      .then(response => {
+        token = response.body.token;
+        mediaTestUser._id = response.body.user._id;
       });
-    return mediaTestUser;
   });
 
   let testImg = {
@@ -62,38 +45,16 @@ describe('media api', () => {
   };
 
   function saveMedia(media) {
-    const { _id } = mediaTestUser.user;
-    const token = mediaTestUser.token;
+    const { _id } = mediaTestUser;
     return request
       .patch(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
-      .send(video)
-      .then(res => {
-        let body = res.body;
-        return video;
-      });
-  }
-
-  function saveImage(image) {
-    const _id = mediaTestUser.user.user._id;
-    const token = mediaTestUser.token;
-    const buffer = fs.readFileSync(imagePath);    
-    return request
-      .patch(`/api/athletes/${_id}/media`)
-      .set('Authorization', token)
-      .attach('image', buffer)
-      .field('description', image.description)
-      .field('mediaType', image.mediaType)
-      .then(res => {
-        let body = res.body;
-        return image;
-      });
+      .send(media)
+      .then(res => res.body);
   }
 
   it('Initial /GET returns empty list', () => {
-    const {token} = mediaTestUser;
-    const {_id} = mediaTestUser.user.user
-
+    const {_id} = mediaTestUser;
     return request
       .get(`/api/athletes/${_id}/media`)
       .set('Authorization', token)
@@ -104,54 +65,27 @@ describe('media api', () => {
   });
 
   it('saves a video', () => {
-    return saveVideo(testVideo).then(saved =>
-      assert.deepEqual(saved, testVideo)
-    );
+    return saveMedia(testVideo).then(saved => assert.deepEqual(saved, [testVideo]));
   });
 
   it('saves an image', () => {
-    return saveImage(testImg).then(saved => assert.deepEqual(saved, testImg));
+    return saveMedia(testImg).then(saved => assert.deepEqual(saved, [testVideo, testImg]));
   });
 
   it('Gets all media', () => {
-    const { _id } = mediaTestUser.user;
-    const token = mediaTestUser.token;
-
-    return Promise.all([saveImage(newTestImg), saveVideo(newTestVideo)])
-      .then(savedMedia => {
-        newTestImg = savedMedia[0];
-        newTestVideo = savedMedia[1];
-      })
+    const { _id } = mediaTestUser;
+    return Promise.all([
+      saveMedia(newTestImg), 
+      saveMedia(newTestVideo)
+    ])
       .then(() =>
         request
           .get(`/api/athletes/${_id}/media`)
           .set('Authorization', token)
           .then(res => res.body)
           .then(media => {
-            assert.deepEqual(media[3].description, newTestImg.description);
-            assert.deepEqual(media[2], newTestVideo);
+            assert.deepEqual(media.length, 4);
           })
       );
-  });
-
-  xit('patches a media', () => {
-    const userId = mediaTestUser._id;
-    return request
-      .patch(url)
-      .send({ genus: 'something else' })
-      .then(res => res.body)
-      .then(res => assert.deepEqual(res.genus, 'something else'));
-  });
-
-  xit('deletes a piece of media', () => {
-    const userId = mediaTestUser._id;
-    return request
-      .delete(url)
-      .then(res => {
-        assert.deepEqual(res.body, { removed: true });
-        return res;
-      })
-      .then(() => request.delete(url))
-      .then(res => assert.deepEqual(res.body, { removed: false }));
   });
 });
