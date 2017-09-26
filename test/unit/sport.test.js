@@ -1,4 +1,4 @@
-const SportSchema = require('../../lib/models/sport');
+const SportSchema = require('../../lib/models/Sport');
 const { assert } = require('chai');
 const mongoose = require('mongoose');
 
