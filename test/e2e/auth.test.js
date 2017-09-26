@@ -7,8 +7,34 @@ describe('user auth API', () => {
   before(drop);
 
   const testUserOne = {
-    email: 'tokenjoeOne@joe.com',
-    password: 'abc'
+    "email": "gtomkin0@prlog.org",
+    "password": "QsaPZOdzP",
+    "info": {
+      "firstName": "Griffy",
+      "lastName": "Tomkin",
+      "public": true,
+      "profileUrl": "http://dummyimage.com/197x193.png/dddddd/000000",
+      "primarySport": "",
+      "primarySportGender": "Male",
+      "position": "goalie",
+      "organization": "Yotz",
+      "location": {
+        "city": "Muqui",
+        "country": "Peru"
+      }
+    },
+    "bio": {
+      "about": "Take astroturf robbed pickoff shift steal tossed appeal first base. Field peanuts astroturf airmail good eye",
+      "awards": "In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi."
+    },
+    "edu": {
+      "institution": "STMIK AMIKOM Yogyakarta",
+      "year": 1995,
+      "address": {
+        "country": "Indonesia",
+        "city": "Cipari"
+      }
+    }
   };
   const testUserTwo = {
     email: 'tokenjoeTwo@joe.com',
@@ -19,7 +45,7 @@ describe('user auth API', () => {
     password: 'qwerty'
   };
 
-  it('signs up a user successfully', () => {
+  it.only('signs up a user successfully', () => {
     return req
       .post('/api/auth/signup')
       .send(testUserOne)
