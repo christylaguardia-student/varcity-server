@@ -3,7 +3,7 @@ const chai = require('chai');
 const assert = chai.assert;
 const { drop } = require('./_db');
 
-describe('user auth API', () => {
+describe.skip('user auth API', () => {
   before(drop);
 
   const testUserOne = {
@@ -45,7 +45,7 @@ describe('user auth API', () => {
     password: 'qwerty'
   };
 
-  it.only('signs up a user successfully', () => {
+  it('signs up a user successfully', () => {
     return req
       .post('/api/auth/signup')
       .send(testUserOne)
