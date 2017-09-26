@@ -1,25 +1,56 @@
 const EduSchema = require('../../lib/models/Edu');
-const { assert } = require('chai');
 const mongoose = require('mongoose');
 
-describe('Edu model', () => {
+describe('Edu Model', () => {
 
   const Edu = mongoose.model('Edu', EduSchema);
 
-  it('validates required fields', () => {
+  it('validates with all fields', () => {
     const edu = new Edu({
-      institution: 'Harvard'
+      schools: [
+        {
+          institution: 'Harvard',
+          year: 2016,
+          address: {
+            country: 'United States',
+            region: 'Oregon',
+            city: 'Portland'
+          },
+          degree: 'Bachelors of Science'
+        },
+        {
+          institution: 'Harvard 2',
+          year: 2017,
+          address: {
+            country: 'United States',
+            region: 'Oregon',
+            city: 'Portland'
+          },
+          degree: 'Master of Science'
+        },
+      ],
+      testScores: {
+        SAT: {
+          reading: 1000,
+          math: 1000,
+          writing: 1000,
+        },
+        ACT: {
+          reading: 1000,
+          math: 1000,
+          writing: 1000,
+          science: 1000
+        },
+        IB: {
+          language: 1000,
+          math: 1000,
+          science: 1000,
+          history: 1000
+        }
+      }
     });
+
     return edu.validate();
   });
 
-  it('fails validation when required fields are missing', () => {
-    const edu = new Edu();
-    return edu.validate()
-      .then( () => { throw new Error('Expected validation error');
-      },
-      ({ errors }) => {
-        assert.ok(errors.institution);
-      });
-  });
 });
