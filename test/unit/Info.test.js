@@ -34,7 +34,8 @@ describe('Info Model', () => {
       lastName: 'La Guardia',
       public: true,
       profileUrl: 'http://www.laguardia.io/images/main/paper-plane-blue-120px.jpg',
-      primarySport: 'Volleyball - Women\'s',
+      primarySport: 'Volleyball',
+      primarySportGender: 'Women\'s',
       position: 'I dunno',
       person: {
         dob: new Date(4, 23, 1987),
@@ -59,6 +60,24 @@ describe('Info Model', () => {
     });
 
     return info.validate();
+  });
+
+  it('sport and sportGender should be of enum type', () => {
+    const info = new Info({
+      firstName: 'Christy',
+      lastName: 'La Guardia',
+      primarySport: 'bad sport',
+      primarySportGender: 'bad gender',
+    });
+
+    return info.validate()
+      .then( () => { throw new Error('Expected validation error');
+      },
+      ({ errors }) => {
+        assert.equal(errors.primarySport.kind, 'enum');
+        assert.equal(errors.primarySportGender.kind, 'enum');
+      });
+
   });
 
 });
