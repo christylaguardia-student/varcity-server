@@ -1,15 +1,15 @@
-require('mongoose').Promise = Promise;
+const mongoose = require('mongoose');
 const assert = require('chai').assert;
-const Media = require('../../lib/models/Media');
+const MediaSchema = require('../../lib/models/Media');
 
-const expectedValidation = () => { throw new Error('expected validation errors'); };
+describe('Media Schema', () => {
 
-describe('Media model', () => {
+  const Media = mongoose.model('Media', MediaSchema);
 
-  xit('validates a good model', () => {
+  it('validates a good model', () => {
     const media = new Media({
       description: 'Test Desc',
-      mediaType: 'video link',
+      mediaType: 'Video Link',
       videoUrl: 'youtubelink.com'
     });
     return media.validate();
@@ -17,14 +17,16 @@ describe('Media model', () => {
 
   describe('validation failures', () => {
 
-    xit('fails if required fields missing', () => {
+    const expectedValidation = () => { throw new Error('expected validation errors'); };
+    
+    it('fails if required fields missing', () => {
       const media = new Media();
       return media.validate()
         .then(expectedValidation,
           err => {
             const errors = err.errors;
-            assert.ok(errors.description && errors.videoUrl && errors.img);
-            assert.equal(errors.description.kind && errors.videoUrl.kind && errors.img.kind, 'required');
+            assert.ok(errors.description && errors.mediaType);
+            assert.equal(errors.description.kind && errors.mediaType.kind, 'required');
           });
     });
   });
