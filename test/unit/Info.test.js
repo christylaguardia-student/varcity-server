@@ -34,7 +34,8 @@ describe('Info Model', () => {
       lastName: 'La Guardia',
       public: true,
       profileUrl: 'http://www.laguardia.io/images/main/paper-plane-blue-120px.jpg',
-      primarySport: 'Volleyball - Women\'s',
+      primarySport: 'Volleyball',
+      primarySportGender: 'Women\'s',
       position: 'I dunno',
       person: {
         dob: new Date(4, 23, 1987),
