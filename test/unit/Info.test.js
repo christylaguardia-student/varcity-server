@@ -62,4 +62,22 @@ describe('Info Model', () => {
     return info.validate();
   });
 
+  it('sport and sportGender should be of enum type', () => {
+    const info = new Info({
+      firstName: 'Christy',
+      lastName: 'La Guardia',
+      primarySport: 'bad sport',
+      primarySportGender: 'bad gender',
+    });
+
+    return info.validate()
+      .then( () => { throw new Error('Expected validation error');
+      },
+      ({ errors }) => {
+        assert.equal(errors.primarySport.kind, 'enum');
+        assert.equal(errors.primarySportGender.kind, 'enum');
+      });
+
+  });
+
 });

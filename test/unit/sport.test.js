@@ -6,7 +6,7 @@ describe('Sport Model', () => {
 
   const Sport = mongoose.model('Sport', SportSchema);
 
-  it('validates required fields', () => {
+  it('validates with required fields', () => {
     const sport = new Sport({
       sport: 'Basketball',
       sportGender: 'Men\'s',
@@ -36,6 +36,24 @@ describe('Sport Model', () => {
         assert.ok(errors.organization);
         assert.ok(errors.position);
       });
+  });
+
+  it('sport and sportGender should be of enum type', () => {
+    const sport = new Sport({
+      sport: 'bad sport',
+      sportGender: 'bad gender',
+      organization: 'Alchemy Code Lab',
+      position: 'Coder',
+    });
+
+    return sport.validate()
+      .then( () => { throw new Error('Expected validation error');
+      },
+      ({ errors }) => {
+        assert.equal(errors.sport.kind, 'enum');
+        assert.equal(errors.sportGender.kind, 'enum');
+      });
+
   });
 
 });
