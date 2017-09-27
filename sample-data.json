@@ -55,13 +55,13 @@
   "media": [
     {
       "description": "here's a video of me doing sports",
-      "mediaType": "video link",
+      "mediaType": "Video Link",
       "videoUrl": "http://google.com/"
     },
     {
       "description": "here's an image of me doing sports",
-      "mediaType": "image upload",
-      "img": "Buffer"
+      "mediaType": "Image Link",
+      "imageUrl": "www.something.com"
     }
   ]
 }
