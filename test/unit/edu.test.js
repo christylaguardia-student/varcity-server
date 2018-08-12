@@ -5,6 +5,7 @@ describe('Edu Model', () => {
 
   const Edu = mongoose.model('Edu', EduSchema);
 
+  // this doesn't really test validation, just that it doesn't fail with all fields included
   it('validates with all fields', () => {
     const edu = new Edu({
       schools: [

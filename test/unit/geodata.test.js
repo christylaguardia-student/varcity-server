@@ -37,5 +37,6 @@ describe('geodata api service', function() {
         .then(cities => assert.equal(cities.length, 0));
     });
   });
-  
-});
+
+// you can chain timeout call, then use arrow functions 
+}).timeout(5000);
